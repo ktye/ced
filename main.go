@@ -19,6 +19,9 @@ func main() {
 	if len(a) == 1 {
 		histogram(a[0])
 		return
+	} else if len(a) == 2 && a[0] == "h2" {
+		h2(a[1])
+		return
 	} else if len(a) == 2 {
 		grey = parseGrey(a[0])
 		if grey == 0 {
@@ -58,6 +61,17 @@ func main() {
 				}
 			}
 			d.Set(i, j, c)
+		}
+	}
+	writeImage(d)
+}
+func h2(s string) {
+	m, w, h := readImage(s)
+	d := image.NewRGBA(image.Rectangle{Max: image.Point{w, 2 * h}})
+	draw.Draw(d, d.Bounds(), &image.Uniform{color.White}, image.ZP, draw.Src)
+	for i := 0; i < w; i++ {
+		for j := 0; j < h; j++ {
+			d.Set(i, 2*j, m.At(i, j))
 		}
 	}
 	writeImage(d)

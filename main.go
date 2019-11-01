@@ -9,34 +9,34 @@ import (
 	"os"
 	"sort"
 	"strconv"
-	"strings"
 )
 
 func main() {
 	a := os.Args[1:]
 	grey := uint8(0)
 	var colors []color.RGBA
-	if len(a) == 1 {
+	switch {
+	case len(a) == 1:
 		histogram(a[0])
 		return
-	} else if len(a) == 2 && a[0] == "h2" {
+	case a[0] == "h2":
 		h2(a[1])
 		return
-	} else if len(a) == 2 {
+	case a[0] == "reshape":
+		reshape(a[1:])
+		return
+	case len(a) == 2:
 		grey = parseGrey(a[0])
 		if grey == 0 {
 			panic("grey must be > 0")
 		}
-	} else if len(a) > 2 && strings.HasSuffix(a[1], "#") {
-		reshape(a)
-		return
-	} else if len(a) < 3 || len(a)%2 == 0 {
+	case len(a) < 3 || len(a)%2 == 0:
 		panic("not enough arguments")
-	} else {
-		a = a[:len(a)-1]
-		colors = make([]color.RGBA, len(a))
-		for i := range a {
-			colors[i] = parseColor(a[i])
+	default:
+		b := a[:len(a)-1]
+		colors = make([]color.RGBA, len(b))
+		for i := range b {
+			colors[i] = parseColor(b[i])
 		}
 	}
 	m, w, h := readImage(a[len(a)-1])
@@ -137,7 +137,7 @@ func reshape(a []string) {
 	var e error
 	rows, e = strconv.Atoi(a[0])
 	fail(e)
-	cols, e = strconv.Atoi(strings.TrimSuffix(a[1], "#"))
+	rows, e = strconv.Atoi(a[1])
 	fail(e)
 	a = a[2:]
 	d := image.NewRGBA(image.Rectangle{})

@@ -9,7 +9,6 @@ $ ced in.png
 #ff0000ff 7851
 #00000000 14318
 
-
 (2) two arguments: create black-white from greyscale with threshold
 $ ced aa in.png
 
@@ -19,5 +18,5 @@ $ ced '#00000000' '#FFFFFFFF' in.png
 
 (4) catenate images in rows/cols
 # append all images in two rows and three columns
-$ ced 2 '3#' *.png
+$ ced reshape 2 3 *.png
 ```
